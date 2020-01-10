@@ -4,20 +4,11 @@ RUN apk update
 RUN apk add python py-pip py-setuptools git ca-certificates
 RUN pip install python-dateutil
 
-RUN git clone https://github.com/s3tools/s3cmd.git /opt/s3cmd
-RUN ln -s /opt/s3cmd/s3cmd /usr/bin/s3cmd
+RUN git clone https://github.com/s3tools/s3cmd.git /main
+RUN ln -s /main/s3cmd /usr/bin/s3cmd
 
-WORKDIR /opt
+WORKDIR /main
 
-ADD ./files/s3cfg /opt/.s3cfg
-ADD ./files/main.sh /opt/main.sh
+RUN mkdir /main/src
 
-# Main entrypoint script
-RUN chmod 777 /opt/main.sh
-
-# Folders for s3cmd optionations
-RUN mkdir /opt/src
-RUN mkdir /opt/dest
-
-WORKDIR /
-CMD ["/opt/main.sh"]
+ENTRYPOINT ["s3cmd"]
